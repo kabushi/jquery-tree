@@ -22,10 +22,10 @@
             var ul = parent.find('ul:first');
 
             if (ul.length) {
-                if ((undefined == position) || (ul.children('li').length < position)) {
+                if ((undefined === position) || (ul.children('li').length < position)) {
                     ul.append(li);
                 } else {
-                    if (position == 0) {
+                    if (position === 0) {
                         position = position + 1;
                     }
                     ul.children('li:nth-child(' + position + ')').before(li);
@@ -47,10 +47,10 @@
          * @param position position of the node between brothers (expressed as positive integer)
          */
         _attachNode: function (li, parentLi, position) {
+            var parent;
+            if (undefined === parentLi) {
 
-            if (undefined == parentLi) {
-
-                var parent = this.element;
+                parent = this.element;
 
                 this._attachLi(li, parent, position);
 
@@ -59,7 +59,7 @@
 
             } else {
 
-                var parent = parentLi;
+                parent = parentLi;
 
                 this._attachLi(li, parent, position);
 
@@ -86,16 +86,14 @@
             attributes = $.extend(true, this.options.defaultNodeAttributes, attributes);
 
             // create new node label
-            var span = $('<span/>', attributes.span);
+            var span = $('<span/>', attributes.span),
 
             // create node
-            var li = $('<li/>', attributes.li);
+            li = $('<li/>', attributes.li);
 
             // if checkbox component is active, new node must contain checkbox input
             if ($.inArray('checkbox', this.options.components) > -1) {
-                var input = $('<input/>',
-                    attributes.input
-                );
+                var input = $('<input/>', attributes.input);
                 li.append(input);
             }
 
@@ -155,7 +153,7 @@
                 t._initializeNode($(this));
             });
 
-            if (this.options.nodes != null) {
+            if (this.options.nodes !== null) {
                 $.each(this.options.nodes, function (key, value) {
                     t.options.core.addNode(value);
                 });
@@ -182,13 +180,13 @@
          */
         _detachNode: function (li) {
 
-            var parentLi = this.options.core.parentNode(li);
+            var parentLi = this.options.core.parentNode(li),
 
-            var ul = parentLi.find('ul:first');
+            ul = parentLi.find('ul:first');
 
-            if (ul.children().length == 1) {
+            if (ul.children().length === 1) {
                 ul.detach();
-                parentLi.removeClass('collapsed expanded').addClass('leaf') //@todo find right way to do this
+                parentLi.removeClass('collapsed expanded').addClass('leaf'); //@todo find right way to do this
             } else {
                 li.detach();
             }
@@ -249,7 +247,7 @@
 
             var li = this._buildNode(attributes);
 
-            if ((undefined == parentLi) || 0 == parentLi.length) {
+            if ((undefined === parentLi) || 0 === parentLi.length) {
                 this._attachNode($(li), undefined, position);
             } else {
                 this._attachNode($(li), $(parentLi), position);
@@ -291,7 +289,7 @@
 
             this._detachNode($(li));
 
-            if ((undefined == parentLi) || 0 == parentLi.length) {
+            if ((undefined === parentLi) || 0 === parentLi.length) {
                 this._attachNode($(li), undefined, position);
             } else {
                 this._attachNode($(li), $(parentLi), position);
@@ -333,7 +331,7 @@
          * @return true if all descendant checked
          */
         _allDescendantChecked: function (li) {
-            return (li.find('li input:checkbox:not(:checked)').length == 0);
+            return (li.find('li input:checkbox:not(:checked)').length === 0);
         },
 
         /**
@@ -588,7 +586,7 @@
          */
         _createCollapsible: function () {
 
-            var t = this
+            var t = this;
 
             // bind collapse/expand event
             this.element.on("click", 'li span.daredevel-tree-anchor', function () {
@@ -653,7 +651,7 @@
             anchor.removeClass('ui-icon ' + this.options.expandUiIcon + ' ' + this.options.leafUiIcon);
 
             if (this.options.collapseUiIcon.length > 0) {
-                anchor.addClass('ui-icon ' + this.options.collapseUiIcon)
+                anchor.addClass('ui-icon ' + this.options.collapseUiIcon);
             }
 
             li.removeClass("leaf").removeClass("expanded").addClass("collapsed");
@@ -673,7 +671,7 @@
             anchor.removeClass('ui-icon ' + this.options.collapseUiIcon + ' ' + this.options.leafUiIcon);
 
             if (this.options.expandUiIcon.length > 0) {
-                anchor.addClass('ui-icon ' + this.options.expandUiIcon)
+                anchor.addClass('ui-icon ' + this.options.expandUiIcon);
             }
 
             li.removeClass("leaf").removeClass("collapsed").addClass("expanded");
@@ -693,7 +691,7 @@
             anchor.removeClass('ui-icon ' + this.options.collapseUiIcon + ' ' + this.options.expandUiIcon);
 
             if (this.options.leafUiIcon.length > 0) {
-                anchor.addClass('ui-icon ' + this.options.leafUiIcon)
+                anchor.addClass('ui-icon ' + this.options.leafUiIcon);
             }
 
             li.removeClass("collapsed").removeClass("expanded").addClass("leaf");
@@ -841,15 +839,16 @@
                     hoverClass: 'over',
                     drop: function (event, ui) {
 
-                        var li = $(this).closest('li');
-
+                        var li = $(this).closest('li'),
+                        parentLi,
+                        droppable;
                         // if node will be a root parent is undefined, else catch new parentLi
                         if (t.options.core.isRoot(li)) {
-                            var parentLi = undefined;
-                            var droppable = t.options.core.element;
+                            parentLi = undefined;
+                            droppable = t.options.core.element;
                         } else {
-                            var parentLi = li.parent().closest('li');
-                            var droppable = parentLi;
+                            parentLi = li.parent().closest('li');
+                            droppable = parentLi;
 
                             // prevent loops
                             if ($(ui.draggable.parent('li')).find(parentLi).length) {
@@ -880,7 +879,7 @@
                 revertDuration: 0
             });
 
-            var span = $('<span/>', {
+            var span2 = $('<span/>', {
                 'class': 'droppable-label',
                 html: '<br/>'
             }).droppable({
@@ -903,7 +902,7 @@
                     }
                 });
 
-            $(li).find('.daredevel-tree-label:first').after(span);
+            $(li).find('.daredevel-tree-label:first').after(span2);
 
         },
 
